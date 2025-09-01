@@ -71,7 +71,7 @@ const Hero = () => {
           </div>
 
           {/* Stats */}
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-8 text-white/80">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 text-white/80 pb-24 sm:pb-0">
             <div className="flex items-center gap-2">
               <Users className="w-5 h-5" />
               <span>Perfect for Groups</span>
@@ -86,7 +86,7 @@ const Hero = () => {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/60">
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/60">
         <div className="animate-bounce">
           <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
             <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse" />
