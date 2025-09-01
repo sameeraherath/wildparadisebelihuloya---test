@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Sri Lankan Forest Camping Design System - All colors in HSL */
+
+@layer base {
+  :root {
+    /* Base colors */
+    --background: 32 25% 97%;
+    --foreground: 155 65% 15%;
+
+    /* Card colors */
+    --card: 32 35% 98%;
+    --card-foreground: 155 65% 15%;
+
+    /* Popover colors */
+    --popover: 32 35% 98%;
+    --popover-foreground: 155 65% 15%;
+
+    /* Primary - Deep Forest Green */
+    --primary: 155 65% 20%;
+    --primary-foreground: 32 25% 97%;
+
+    /* Secondary - River Blue */
+    --secondary: 200 45% 35%;
+    --secondary-foreground: 32 25% 97%;
+
+    /* Muted - Soft Earth */
+    --muted: 32 20% 90%;
+    --muted-foreground: 155 35% 35%;
+
+    /* Accent - Warm Sunset */
+    --accent: 35 85% 65%;
+    --accent-foreground: 155 65% 15%;
+
+    /* Destructive */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 32 25% 97%;
+
+    /* Borders and inputs */
+    --border: 32 25% 85%;
+    --input: 32 25% 85%;
+    --ring: 155 65% 20%;
+
+    /* Custom camping colors */
+    --forest-dark: 155 75% 12%;
+    --forest-medium: 155 65% 20%;
+    --forest-light: 155 45% 35%;
+    --river-deep: 200 55% 25%;
+    --river-medium: 200 45% 35%;
+    --river-light: 200 35% 55%;
+    --earth-warm: 32 45% 75%;
+    --earth-rich: 25 35% 55%;
+    --sunset-orange: 35 85% 65%;
+    --sunset-golden: 45 75% 70%;
+
+    /* Gradients */
+    --gradient-forest: linear-gradient(135deg, hsl(var(--forest-dark)), hsl(var(--forest-medium)));
+    --gradient-river: linear-gradient(135deg, hsl(var(--river-deep)), hsl(var(--river-light)));
+    --gradient-sunset: linear-gradient(135deg, hsl(var(--sunset-orange)), hsl(var(--sunset-golden)));
+    --gradient-nature: linear-gradient(135deg, hsl(var(--forest-medium)), hsl(var(--river-medium)));
+
+    /* Shadows */
+    --shadow-forest: 0 10px 30px -10px hsl(var(--forest-dark) / 0.3);
+    --shadow-river: 0 10px 30px -10px hsl(var(--river-deep) / 0.2);
+    --shadow-warm: 0 8px 25px -8px hsl(var(--sunset-orange) / 0.4);
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
