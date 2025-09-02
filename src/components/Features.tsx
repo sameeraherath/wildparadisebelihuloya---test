@@ -33,13 +33,6 @@ const Features = () => {
       highlight: "Culinary",
     },
     {
-      icon: Wifi,
-      title: "Modern Amenities",
-      description:
-        "Stay connected with high-speed internet and modern comforts.",
-      highlight: "Connected",
-    },
-    {
       icon: Shield,
       title: "24/7 Support",
       description: "Our on-site team is always available for your needs.",

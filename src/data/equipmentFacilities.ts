@@ -89,18 +89,7 @@ export const facilities: Facility[] = [
     category: "convenience",
     availability: "6:00 PM - 10:00 PM",
   },
-  {
-    icon: Wifi,
-    title: "Connectivity",
-    description: "High-speed internet in common areas",
-    features: [
-      "Work-friendly spaces",
-      "Video call facilities",
-      "Business center access",
-    ],
-    category: "convenience",
-    availability: "24/7",
-  },
+
   {
     icon: Car,
     title: "Parking & Storage",
