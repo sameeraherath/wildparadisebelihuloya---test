@@ -3,12 +3,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
-  Calendar,
-  Users,
-  MapPin,
-  Phone,
-  Mail,
-  Clock,
   CheckCircle,
   Star,
 } from "lucide-react";
@@ -249,6 +243,9 @@ const Booking = () => {
                       <Button
                         variant={pkg.recommended ? "hero" : "outline"}
                         className="w-full px-6 py-3 text-base"
+                        onClick={() =>
+                          (window.location.href = "tel:0762756333")
+                        }
                       >
                         Book This Package
                       </Button>
