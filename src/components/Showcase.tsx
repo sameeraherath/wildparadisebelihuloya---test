@@ -5,7 +5,7 @@ import { Utensils, TreePine, Home, Shield, Heart, Users } from "lucide-react";
 const Showcase = () => {
   const showcaseItems = [
     {
-      icon: <Utensils className="w-8 h-8 text-green-600" />,
+      icon: <Utensils className="w-8 h-8 text-forest-medium" />,
       title: "Delicious Local Cuisine",
       description:
         "Savor authentic Sri Lankan flavors with fresh, locally-sourced ingredients prepared in our clean, family-friendly kitchen facilities.",
@@ -18,7 +18,7 @@ const Showcase = () => {
       image: "/images/features/1.png",
     },
     {
-      icon: <TreePine className="w-8 h-8 text-green-600" />,
+      icon: <TreePine className="w-8 h-8 text-forest-medium" />,
       title: "Rich Wildlife Experience",
       description:
         "Discover the diverse flora and fauna of Belihuloya in a safe, guided environment perfect for families with children.",
@@ -31,7 +31,7 @@ const Showcase = () => {
       image: "/images/features/2.png",
     },
     {
-      icon: <Home className="w-8 h-8 text-green-600" />,
+      icon: <Home className="w-8 h-8 text-forest-medium" />,
       title: "Comfortable Accommodation",
       description:
         "Rest easy in our well-maintained, secure camping facilities designed with families in mind, ensuring comfort and safety.",
@@ -46,14 +46,14 @@ const Showcase = () => {
   ];
 
   return (
-    <section className="py-16 bg-gradient-to-b from-green-50 to-white">
+    <section className="py-16 bg-white">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Badge
               variant="secondary"
-              className="bg-green-100 text-green-800 hover:bg-green-200"
+              className="bg-river-deep/10 text-river-deep hover:bg-river-deep/20"
             >
               Family Safe Experience
             </Badge>
@@ -105,7 +105,7 @@ const Showcase = () => {
                         key={featureIndex}
                         className="flex items-center gap-2"
                       >
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <div className="w-2 h-2 bg-river-medium rounded-full"></div>
                         <span className="text-sm text-gray-700">{feature}</span>
                       </div>
                     ))}
@@ -115,7 +115,6 @@ const Showcase = () => {
             </Card>
           ))}
         </div>
-
       </div>
     </section>
   );

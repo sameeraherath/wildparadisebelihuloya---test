@@ -121,7 +121,7 @@ const LocationDirections = () => {
                 className="w-full sm:w-auto"
                 onClick={() =>
                   window.open(
-                    "https://maps.google.com/?q=6.7167,80.7833",
+                    "https://maps.app.goo.gl/YEAHFRMVMvZLeYqu5",
                     "_blank"
                   )
                 }
@@ -164,7 +164,7 @@ const LocationDirections = () => {
           <div className="max-w-4xl mx-auto">
             <div className="relative bg-card rounded-lg overflow-hidden shadow-forest">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d57378.939716885!2d80.7754525!3d6.6640011999999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae3f52f629b778b%3A0xc32d73885770e176!2sSamanalawewa%20Reservoir!5e1!3m2!1sen!2slk!4v1756703636472!5m2!1sen!2slk"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3585.972034530225!2d80.7823683!3d6.692887600000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae38b2cd0a9a7d9%3A0xba00116269643bc0!2sWild%20Paradise%20Belihuloya!5e1!3m2!1sen!2slk!4v1756810910469!5m2!1sen!2slk"
                 width="100%"
                 height="450"
                 style={{ border: 0 }}
