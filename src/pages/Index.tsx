@@ -6,6 +6,7 @@ import Activities from "@/components/Activities";
 import Gallery from "@/components/Gallery";
 import Testimonials from "@/components/Testimonials";
 import Booking from "@/components/Booking";
+import DayFunctionBooking from "@/components/DayFunctionBooking";
 import Footer from "@/components/Footer";
 import FAQ from "@/components/FAQ";
 import LocationDirections from "@/components/LocationDirections";
@@ -64,6 +65,7 @@ const Index = () => {
       <Features />
 
       <Booking />
+      <DayFunctionBooking />
       <Activities />
       <Gallery />
       <FoodDining />

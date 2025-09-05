@@ -1,3 +1,22 @@
+/**
+ * @fileoverview Booking Component - Production-ready camping package booking interface
+ *
+ * Features:
+ * - Responsive design with mobile-first approach
+ * - Optimized spacing and typography hierarchy
+ * - Smooth animations with framer-motion
+ * - Accessible components with ARIA labels
+ * - Type-safe TypeScript implementation
+ * - Performance optimized with React.memo
+ * - Error handling for booking actions
+ * - Analytics integration ready
+ *
+ * @author Wild Paradise Belihuloya
+ * @version 2.0.0
+ */
+
+import React from "react";
+import { motion } from "framer-motion";
 import {
   Card,
   CardContent,
@@ -5,273 +24,484 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
-  Leaf,
+  Users,
+  Star,
+  Phone,
+  Tent,
+  Utensils,
   Waves,
   Flame,
   Coffee,
-  Tent,
-  Utensils,
-  Star,
-  Users,
-  Phone,
+  Leaf,
+  Shield,
+  LucideIcon,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import {
+  localPackages,
+  foreignPackages,
+  type PackageCategory,
+} from "@/data/packages";
 
-const individualPackages = [
-  {
-    name: "Day Function – Lunch Only",
-    price: 2500,
-    features: [
-      { icon: Utensils, text: "Lunch" },
-      { icon: Waves, text: "Kayak" },
-      { icon: Leaf, text: "Nature walk" },
-    ],
-  },
-  {
-    name: "Day Function – Lunch & Dinner",
-    price: 4500,
-    features: [
-      { icon: Utensils, text: "Lunch & Dinner" },
-      { icon: Leaf, text: "Nature walk" },
-      { icon: Waves, text: "Kayak" },
-      { icon: Coffee, text: "Evening herbal drink" },
-      { icon: Flame, text: "Bonfire with Marshmallow burning" },
-    ],
-    recommended: true,
-  },
-  {
-    name: "Day Function – Dinner Only",
-    price: 3500,
-    features: [
-      { icon: Utensils, text: "BBQ Dinner" },
-      { icon: Flame, text: "Bonfire with Marshmallow burning" },
-      { icon: Coffee, text: "Evening herbal drink" },
-      { icon: Leaf, text: "Nature walk" },
-      { icon: Waves, text: "Kayak" },
-    ],
-  },
-  {
-    name: "Tent Only ⛺",
-    price: 6500,
-    features: [
-      { icon: Tent, text: "Tent stay" },
-      { icon: Leaf, text: "Nature walk" },
-      { icon: Waves, text: "Kayak" },
-      { icon: Coffee, text: "Evening herbal drink" },
-      { icon: Coffee, text: "Bed tea ☕" },
-    ],
-  },
-];
+// Global type extension for Google Analytics
+declare global {
+  interface Window {
+    gtag?: (
+      command: string,
+      eventName: string,
+      parameters?: Record<string, unknown>
+    ) => void;
+  }
+}
 
-const aLaCarteOptions = [
-  { name: "Breakfast", price: 1500 },
-  { name: "Lunch", price: 2000 },
-  { name: "Dinner", price: 2500 },
-];
-
-const groupPackages = [
-  { people: "20", price: 6000 },
-  { people: "30", price: 5500 },
-  { people: "Above 30", price: 5000 },
-];
-
-const Booking = () => {
-  const containerVariants = {
+// Animation variants for consistent motion across components
+const ANIMATION_VARIANTS = {
+  container: {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
     },
-  };
-
-  const itemVariants = {
+  },
+  item: {
     hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.5 } },
-  };
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 0.5 },
+    },
+  },
+  section: {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6 },
+    },
+  },
+  header: {
+    hidden: { opacity: 0, y: -20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.7 },
+    },
+  },
+} as const;
 
+// Type definition for package features
+type PackageFeature = {
+  icon: LucideIcon;
+  text: string;
+};
+
+// Package feature configuration
+const PACKAGE_FEATURES = {
+  base: [
+    { icon: Tent, text: "Camping accommodation" },
+    { icon: Flame, text: "Bonfire experience" },
+    { icon: Utensils, text: "BBQ facilities" },
+    { icon: Leaf, text: "Nature walks" },
+    { icon: Shield, text: "24/7 security" },
+    { icon: Coffee, text: "Electricity 6PM-10PM" },
+  ] as PackageFeature[],
+  fullBoard: [
+    { icon: Utensils, text: "All meals included" },
+    { icon: Waves, text: "Kayak activities" },
+  ] as PackageFeature[],
+  halfBoard: [
+    { icon: Utensils, text: "Breakfast & Dinner" },
+  ] as PackageFeature[],
+  bedBreakfast: [
+    { icon: Coffee, text: "Breakfast included" },
+  ] as PackageFeature[],
+} as const;
+
+/**
+ * Get package features based on package title
+ * @param title - Package title to determine specific features
+ * @returns Array of feature objects with icon and text
+ */
+const getPackageFeatures = (title: string): PackageFeature[] => {
+  const features: PackageFeature[] = [...PACKAGE_FEATURES.base];
+
+  if (title.includes("Full Board")) {
+    features.unshift(...PACKAGE_FEATURES.fullBoard);
+  } else if (title.includes("Half Board")) {
+    features.unshift(...PACKAGE_FEATURES.halfBoard);
+  } else if (title.includes("Bed & Breakfast")) {
+    features.unshift(...PACKAGE_FEATURES.bedBreakfast);
+  }
+
+  return features;
+};
+
+/**
+ * Main Booking component featuring package selection and pricing
+ * Optimized for performance with React.memo
+ */
+const Booking: React.FC = React.memo(() => {
   return (
     <section
       id="booking"
-      className="py-20 bg-gradient-to-b from-muted/30 to-background"
+      className="py-16 lg:py-24 bg-gradient-to-b from-muted/30 to-background"
     >
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+        {/* Section Header */}
         <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
+          className="text-center mb-16 lg:mb-20"
+          variants={ANIMATION_VARIANTS.header}
+          initial="hidden"
+          animate="visible"
         >
-          <Badge variant="secondary" className="mb-4 text-sm font-medium">
-            Reserve Your Spot
+          <Badge
+            variant="secondary"
+            className="mb-6 text-sm font-medium tracking-wide"
+          >
+            Reserve Your Adventure
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground font-playfair">
-            Choose Your Adventure Package
+
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground font-playfair leading-tight">
+            Choose Your Perfect
+            <span className="block text-forest-medium mt-2">
+              Adventure Package
+            </span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            All packages include nature experiences. Pick the one that fits your
-            style.
+
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            All packages include nature experiences and premium camping
+            facilities. Pick the one that fits your adventure style and group
+            size.
           </p>
         </motion.div>
 
-        {/* Individual Packages */}
-        <motion.div
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          {individualPackages.map((pkg) => (
-            <motion.div key={pkg.name} variants={itemVariants}>
-              <Card
-                className={`relative border-0 transition-all duration-300 h-full flex flex-col ${
-                  pkg.recommended
-                    ? "shadow-forest ring-2 ring-forest-medium/20"
-                    : "shadow-sm hover:shadow-river"
-                }`}
-              >
-                {pkg.recommended && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-gradient-sunset text-forest-dark font-bold px-4 py-1">
-                      <Star className="w-3 h-3 mr-1 fill-current" />
-                      Recommended
-                    </Badge>
-                  </div>
-                )}
-                <CardHeader className="text-center">
-                  <CardTitle className="text-2xl font-bold text-foreground">
-                    {pkg.name}
-                  </CardTitle>
-                  <div className="text-4xl font-bold text-forest-medium pt-2">
-                    Rs. {pkg.price.toLocaleString()}
-                    <span className="text-base font-normal text-muted-foreground">
-                      /person
+        {/* Package Selection Tabs */}
+        <Tabs defaultValue="local" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 bg-muted/50 rounded-xl p-1.5 mb-12">
+            <TabsTrigger
+              value="local"
+              className="flex items-center gap-2 text-sm font-medium transition-all duration-200"
+            >
+              <Users className="w-4 h-4" />
+              Local Packages
+            </TabsTrigger>
+            <TabsTrigger
+              value="foreign"
+              className="flex items-center gap-2 text-sm font-medium transition-all duration-200"
+            >
+              <Tent className="w-4 h-4" />
+              Foreign Packages
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Local Packages Tab */}
+          <TabsContent value="local" className="mt-0">
+            <motion.div
+              variants={ANIMATION_VARIANTS.section}
+              initial="hidden"
+              animate="visible"
+            >
+              <Card className="border-0 shadow-lg">
+                <CardHeader className="text-center px-6 lg:px-8 py-8">
+                  <CardTitle className="text-2xl lg:text-3xl font-bold text-foreground mb-4">
+                    Local Packages
+                    <span className="block text-lg lg:text-xl font-normal text-muted-foreground mt-2">
+                      per night
                     </span>
-                  </div>
+                  </CardTitle>
+                  <CardDescription className="text-base lg:text-lg max-w-2xl mx-auto leading-relaxed">
+                    Perfect for Sri Lankan adventurers seeking authentic
+                    wilderness experiences with local hospitality.
+                  </CardDescription>
                 </CardHeader>
-                <CardContent className="flex flex-col flex-grow">
-                  <ul className="space-y-3 mb-8 flex-grow">
-                    {pkg.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-3">
-                        <feature.icon className="w-5 h-5 text-forest-medium flex-shrink-0" />
-                        <span className="text-sm text-muted-foreground">
-                          {feature.text}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Button
-                    variant={pkg.recommended ? "hero" : "outline"}
-                    className="w-full mt-auto"
-                    onClick={() => (window.location.href = "tel:0762756333")}
+                <CardContent className="px-6 lg:px-8 pb-8">
+                  <motion.div
+                    variants={ANIMATION_VARIANTS.container}
+                    initial="hidden"
+                    animate="visible"
+                    className="space-y-8 lg:space-y-12"
                   >
-                    Book This Package
-                  </Button>
+                    {Object.entries(localPackages).map(([key, category]) => (
+                      <motion.div key={key} variants={ANIMATION_VARIANTS.item}>
+                        <PackageSection
+                          category={category}
+                          features={getPackageFeatures(category.title)}
+                          isRecommended={key === "fullBoard"}
+                        />
+                      </motion.div>
+                    ))}
+                  </motion.div>
                 </CardContent>
               </Card>
             </motion.div>
-          ))}
-        </motion.div>
+          </TabsContent>
 
-        {/* A La Carte & Group Packages */}
-        <div className="grid lg:grid-cols-3 gap-12">
-          {/* A La Carte */}
-          <motion.div
-            className="lg:col-span-2"
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-          >
-            <h3 className="text-2xl font-bold mb-6 text-center text-foreground font-playfair">
-              À la Carte Options
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {aLaCarteOptions.map((item) => (
-                <Card
-                  key={item.name}
-                  className="border-0 shadow-sm hover:shadow-forest transition-shadow duration-300 text-center"
-                >
-                  <CardContent className="p-6">
-                    <Utensils className="w-8 h-8 text-river-medium mx-auto mb-3" />
-                    <p className="font-semibold text-foreground">{item.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      Rs. {item.price.toLocaleString()}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </motion.div>
+          {/* Foreign Packages Tab */}
+          <TabsContent value="foreign" className="mt-0">
+            <motion.div
+              variants={ANIMATION_VARIANTS.section}
+              initial="hidden"
+              animate="visible"
+            >
+              <Card className="border-0 shadow-lg">
+                <CardHeader className="text-center px-6 lg:px-8 py-8">
+                  <CardTitle className="text-2xl lg:text-3xl font-bold text-foreground mb-4">
+                    Foreign Packages
+                    <span className="block text-lg lg:text-xl font-normal text-muted-foreground mt-2">
+                      per night
+                    </span>
+                  </CardTitle>
+                  <CardDescription className="text-base lg:text-lg max-w-2xl mx-auto leading-relaxed">
+                    Premium international packages with exceptional service and
+                    comfort for overseas visitors.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="px-6 lg:px-8 pb-8">
+                  <motion.div
+                    variants={ANIMATION_VARIANTS.container}
+                    initial="hidden"
+                    animate="visible"
+                    className="space-y-8 lg:space-y-12"
+                  >
+                    {Object.entries(foreignPackages).map(([key, category]) => (
+                      <motion.div key={key} variants={ANIMATION_VARIANTS.item}>
+                        <PackageSection
+                          category={category}
+                          features={getPackageFeatures(category.title)}
+                          isRecommended={key === "fullBoard"}
+                        />
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </TabsContent>
+        </Tabs>
 
-          {/* Group Packages */}
-          <motion.div
-            className="lg:col-span-1"
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.4 }}
-          >
-            <h3 className="text-2xl font-bold mb-6 text-center text-foreground font-playfair">
-              Group Packages (20+ people)
-            </h3>
-            <Card className="border-0 shadow-sm h-full">
-              <CardContent className="p-4 flex flex-col justify-center h-full">
-                <ul className="divide-y divide-muted">
-                  {groupPackages.map((pkg) => (
-                    <li
-                      key={pkg.people}
-                      className="flex justify-between items-center p-3"
-                    >
-                      <div className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-forest-medium" />
-                        <span className="font-medium text-foreground">
-                          {pkg.people} people
-                        </span>
-                      </div>
-                      <span className="font-bold text-forest-medium">
-                        Rs. {pkg.price.toLocaleString()}
-                        <span className="text-xs font-normal text-muted-foreground">
-                          /person
-                        </span>
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
-
-        {/* Contact CTA */}
+        {/* Contact Call-to-Action */}
         <motion.div
-          className="text-center mt-24 p-8 bg-gradient-sunset rounded-lg"
+          className="text-center mt-16 lg:mt-20 p-8 lg:p-12 bg-gradient-sunset rounded-2xl shadow-lg"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.5 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
         >
-          <h4 className="text-xl font-bold text-forest-dark mb-2">
-            Have Questions or a Custom Request?
-          </h4>
-          <p className="text-forest-dark/80 mb-6 max-w-xl mx-auto">
-            If you face any issues or need to plan a custom event, our team is
-            here to help you create the perfect adventure.
+          <h3 className="text-xl lg:text-2xl xl:text-3xl font-bold text-forest-dark mb-4">
+            Ready to Book Your Adventure?
+          </h3>
+          <p className="text-forest-dark/80 mb-8 max-w-2xl mx-auto text-base lg:text-lg leading-relaxed">
+            Contact our team to reserve your spot or customize your perfect
+            camping experience. We're here to make your wilderness dreams come
+            true.
           </p>
-          <Button
-            variant="outline"
-            className="border-forest-dark text-forest-dark hover:bg-forest-dark hover:text-white"
-            onClick={() => (window.location.href = "tel:0762756333")}
-          >
-            <Phone className="w-4 h-4 mr-2" />
-            Contact Us
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 lg:gap-6 justify-center items-center">
+            <Button
+              variant="outline"
+              size="lg"
+              className="border-2 border-forest-dark text-forest-dark hover:bg-forest-dark hover:text-white transition-all duration-300 font-medium"
+              onClick={() => window.open("tel:0762756333", "_self")}
+              aria-label="Call us at 0762756333 to book your adventure"
+            >
+              <Phone className="w-5 h-5 mr-2" aria-hidden="true" />
+              Contact Us Now
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              className="border-2 border-forest-dark text-forest-dark hover:bg-forest-dark hover:text-white transition-all duration-300 font-medium"
+              onClick={() => {
+                const element = document.getElementById("day-functions");
+                if (element) {
+                  element.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+              aria-label="View day function packages and pricing"
+            >
+              <Utensils className="w-5 h-5 mr-2" aria-hidden="true" />
+              View Day Functions
+            </Button>
+          </div>
         </motion.div>
       </div>
     </section>
+  );
+});
+
+// Add display name for debugging
+Booking.displayName = "Booking";
+
+/**
+ * Package section component displaying individual package details
+ */
+interface PackageSectionProps {
+  category: PackageCategory;
+  features: PackageFeature[];
+  isRecommended?: boolean;
+}
+
+const PackageSection: React.FC<PackageSectionProps> = ({
+  category,
+  features,
+  isRecommended = false,
+}) => {
+  // Get the appropriate icon based on package type
+  const getPackageIcon = (title: string): LucideIcon => {
+    if (title.includes("Full Board")) return Waves;
+    if (title.includes("Half Board")) return Utensils;
+    if (title.includes("Bed & Breakfast")) return Tent;
+    return Tent;
+  };
+
+  const PackageIcon = getPackageIcon(category.title);
+
+  return (
+    <div className="relative">
+      {/* Recommended Badge */}
+      {isRecommended && (
+        <div className="absolute -top-4 left-6 z-10">
+          <Badge className="bg-gradient-sunset text-forest-dark font-bold px-4 py-2 shadow-lg">
+            <Star className="w-4 h-4 mr-2 fill-current" />
+            Most Popular
+          </Badge>
+        </div>
+      )}
+
+      <Card
+        className={`border-0 shadow-md hover:shadow-lg transition-all duration-300 ${
+          isRecommended ? "ring-2 ring-forest-medium/30 ring-offset-2" : ""
+        }`}
+      >
+        <CardHeader className="pb-4">
+          <CardTitle className="text-xl lg:text-2xl font-bold text-foreground flex items-center gap-3">
+            <PackageIcon className="w-6 h-6 lg:w-7 lg:h-7 text-forest-medium flex-shrink-0" />
+            <span className="leading-tight">{category.title}</span>
+          </CardTitle>
+          <CardDescription className="text-base lg:text-lg mt-3 leading-relaxed">
+            {category.description}
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent className="space-y-6">
+          {/* Features Section */}
+          <div className="p-6 bg-muted/40 rounded-xl border border-muted">
+            <h4 className="text-sm lg:text-base font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Shield className="w-4 h-4 text-forest-medium" />
+              What's Included:
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
+              {features.map((feature, index) => (
+                <div key={index} className="flex items-center gap-3">
+                  <feature.icon className="w-4 h-4 lg:w-5 lg:h-5 text-forest-medium flex-shrink-0" />
+                  <span className="text-sm lg:text-base text-muted-foreground">
+                    {feature.text}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Package Grid */}
+          <PackageGrid data={category.packages} />
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+/**
+ * Package grid component displaying pricing options
+ */
+interface PackageGridProps {
+  data: { persons: string; price: string }[];
+}
+
+const PackageGrid: React.FC<PackageGridProps> = ({ data }) => {
+  const handleBooking = (persons: string, price: string) => {
+    try {
+      const message = `Hi! I'd like to book the ${persons} package for ${price} per night. Could you please provide more details?`;
+
+      // For production: You might want to integrate with a booking system
+      // For now, we'll use phone call as the primary CTA
+      window.open("tel:0762756333", "_self");
+
+      // Optional: Track booking intent for analytics
+      if (typeof window !== "undefined" && window.gtag) {
+        window.gtag("event", "booking_intent", {
+          package_type: persons,
+          package_price: price,
+        });
+      }
+    } catch (error) {
+      console.error("Error initiating booking:", error);
+      // Fallback: copy phone number to clipboard
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText("0762756333");
+        alert("Phone number copied to clipboard: 0762756333");
+      }
+    }
+  };
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
+      {data.map((item, index) => (
+        <motion.div
+          key={`${item.persons}-${index}`}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            duration: 0.4,
+            delay: index * 0.1,
+            ease: "easeOut",
+          }}
+          whileHover={{
+            scale: 1.02,
+            transition: { duration: 0.2 },
+          }}
+        >
+          <Card className="border border-muted/60 hover:border-forest-medium/40 transition-all duration-300 hover:shadow-md group">
+            <CardContent className="p-6 lg:p-8">
+              <div className="text-center space-y-4 lg:space-y-6">
+                {/* Person Count */}
+                <div className="flex items-center justify-center gap-3 text-forest-medium">
+                  <Users className="w-5 h-5 lg:w-6 lg:h-6" aria-hidden="true" />
+                  <span className="font-semibold text-foreground text-base lg:text-lg">
+                    {item.persons}
+                  </span>
+                </div>
+
+                {/* Price */}
+                <div className="space-y-1">
+                  <div className="text-2xl lg:text-3xl font-bold text-forest-medium">
+                    {item.price}
+                  </div>
+                  <div className="text-xs lg:text-sm text-muted-foreground">
+                    per night
+                  </div>
+                </div>
+
+                {/* Book Button */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full border-forest-medium/40 text-forest-medium hover:bg-forest-medium hover:text-white transition-all duration-300 font-medium group-hover:border-forest-medium"
+                  onClick={() => handleBooking(item.persons, item.price)}
+                  aria-label={`Book package for ${item.persons} at ${item.price} per night`}
+                >
+                  Book This Package
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      ))}
+    </div>
   );
 };
 

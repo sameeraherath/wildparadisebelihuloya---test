@@ -16,7 +16,11 @@ export {
 
 export { galleryImages } from "./Gallery";
 
-export { allPackages as packages } from "./packages";
+export {
+  localPackages,
+  foreignPackages,
+  packageIncludes,
+} from "./packages";
 
 export {
   providedEquipment,

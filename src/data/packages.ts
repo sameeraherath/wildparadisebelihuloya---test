@@ -1,109 +1,99 @@
-interface PricingTier {
-  people: number;
-  localPrice: number;
-  foreignPrice: number;
+export interface Package {
+  persons: string;
+  price: string;
 }
 
-interface Package {
-  name: string;
-  duration: string;
-  features: string[];
-  recommended?: boolean;
-  reason?: string;
-  pricing: {
-    local: PricingTier[];
-    foreign: PricingTier[];
-    groupDiscounts: {
-      above10: { local: number; foreign: number };
-      above20: { local: number; foreign: number };
-    };
-  };
+export interface PackageCategory {
+  title: string;
+  description: string;
+  packages: Package[];
 }
 
-export const allPackages: Package[] = [
-  {
-    name: "Wild Paradise Experience",
-    duration: "1 Night Full Board",
-    features: [
-      "Full board accommodation",
-      "Kayaking adventure",
-      "Guided nature walk",
-      "Bonfire experience",
-      "BBQ dinner",
-      "Electricity supply (6:00 PM - 10:00 PM)",
-      "Stunning forest location",
+export const localPackages: Record<string, PackageCategory> = {
+  fullBoard: {
+    title: "Full Board (including Kayak & Nature Walk)",
+    description:
+      "Complete experience with all meals, activities, and accommodations",
+    packages: [
+      { persons: "1 Person", price: "LKR 12,000" },
+      { persons: "2 Persons", price: "LKR 22,000" },
+      { persons: "3 Persons", price: "LKR 30,000" },
+      { persons: "4 Persons", price: "LKR 40,000" },
+      { persons: "Above 10 people (per person)", price: "LKR 9,000" },
+      { persons: "Above 20 people (per person)", price: "LKR 8,500" },
     ],
-    recommended: true,
-    pricing: {
-      local: [
-        { people: 1, localPrice: 12000, foreignPrice: 0 },
-        { people: 2, localPrice: 22000, foreignPrice: 0 },
-        { people: 3, localPrice: 30000, foreignPrice: 0 },
-        { people: 4, localPrice: 40000, foreignPrice: 0 },
-      ],
-      foreign: [
-        { people: 1, localPrice: 0, foreignPrice: 70 },
-        { people: 2, localPrice: 0, foreignPrice: 120 },
-        { people: 3, localPrice: 0, foreignPrice: 150 },
-        { people: 4, localPrice: 0, foreignPrice: 200 },
-      ],
-      groupDiscounts: {
-        above10: { local: 9000, foreign: 45 },
-        above20: { local: 8500, foreign: 40 },
-      },
-    },
   },
-];
-
-// Helper function to calculate pricing
-export const calculatePrice = (
-  people: number,
-  isLocal: boolean = true
-): { price: number; currency: string; note: string } => {
-  const pkg = allPackages[0]; // Using the main package
-  
-  if (people >= 20) {
-    return {
-      price: people * (isLocal ? pkg.pricing.groupDiscounts.above20.local : pkg.pricing.groupDiscounts.above20.foreign),
-      currency: isLocal ? "LKR" : "USD",
-      note: `${people} people (20+ group rate)`
-    };
-  }
-  
-  if (people >= 10) {
-    return {
-      price: people * (isLocal ? pkg.pricing.groupDiscounts.above10.local : pkg.pricing.groupDiscounts.above10.foreign),
-      currency: isLocal ? "LKR" : "USD",
-      note: `${people} people (10+ group rate)`
-    };
-  }
-  
-  // Individual pricing for 1-4 people
-  const pricingTiers = isLocal ? pkg.pricing.local : pkg.pricing.foreign;
-  const tier = pricingTiers.find(t => t.people === people);
-  
-  if (tier) {
-    return {
-      price: isLocal ? tier.localPrice : tier.foreignPrice,
-      currency: isLocal ? "LKR" : "USD",
-      note: `${people} ${people === 1 ? 'person' : 'people'}`
-    };
-  }
-  
-  // For 5-9 people, calculate based on per person rate for 4 people
-  const baseTier = pricingTiers.find(t => t.people === 4);
-  if (baseTier) {
-    const perPersonRate = isLocal ? baseTier.localPrice / 4 : baseTier.foreignPrice / 4;
-    return {
-      price: people * perPersonRate,
-      currency: isLocal ? "LKR" : "USD",
-      note: `${people} people (calculated rate)`
-    };
-  }
-  
-  return {
-    price: 0,
-    currency: isLocal ? "LKR" : "USD",
-    note: "Contact for pricing"
-  };
+  halfBoard: {
+    title: "Half Board",
+    description: "Includes breakfast and dinner with accommodations",
+    packages: [
+      { persons: "1 Person", price: "LKR 11,000" },
+      { persons: "2 Persons", price: "LKR 20,000" },
+      { persons: "3 Persons", price: "LKR 27,000" },
+      { persons: "4 Persons", price: "LKR 36,000" },
+      { persons: "Above 10 people (per person)", price: "LKR 8,000" },
+      { persons: "Above 20 people (per person)", price: "LKR 7,500" },
+    ],
+  },
+  bedAndBreakfast: {
+    title: "Bed & Breakfast",
+    description: "Basic package with overnight stay and morning meal",
+    packages: [
+      { persons: "1 Person", price: "LKR 10,000" },
+      { persons: "2 Persons", price: "LKR 18,000" },
+      { persons: "3 Persons", price: "LKR 24,000" },
+      { persons: "4 Persons", price: "LKR 32,000" },
+      { persons: "Above 10 people (per person)", price: "LKR 7,500" },
+      { persons: "Above 20 people (per person)", price: "LKR 7,000" },
+    ],
+  },
 };
+
+export const foreignPackages: Record<string, PackageCategory> = {
+  fullBoard: {
+    title: "Full Board (including Kayak & Nature Walk)",
+    description:
+      "Complete experience with all meals, activities, and accommodations",
+    packages: [
+      { persons: "1 Person", price: "USD 70" },
+      { persons: "2 Persons", price: "USD 120" },
+      { persons: "3 Persons", price: "USD 150" },
+      { persons: "4 Persons", price: "USD 200" },
+      { persons: "Above 10 people (per person)", price: "USD 45" },
+      { persons: "Above 20 people (per person)", price: "USD 40" },
+    ],
+  },
+  halfBoard: {
+    title: "Half Board",
+    description: "Includes breakfast and dinner with accommodations",
+    packages: [
+      { persons: "1 Person", price: "USD 60" },
+      { persons: "2 Persons", price: "USD 110" },
+      { persons: "3 Persons", price: "USD 140" },
+      { persons: "4 Persons", price: "USD 190" },
+      { persons: "Above 10 people (per person)", price: "USD 40" },
+      { persons: "Above 20 people (per person)", price: "USD 35" },
+    ],
+  },
+  bedAndBreakfast: {
+    title: "Bed & Breakfast",
+    description: "Basic package with overnight stay and morning meal",
+    packages: [
+      { persons: "1 Person", price: "USD 60" },
+      { persons: "2 Persons", price: "USD 110" },
+      { persons: "3 Persons", price: "USD 140" },
+      { persons: "4 Persons", price: "USD 190" },
+      { persons: "Above 10 people (per person)", price: "USD 40" },
+      { persons: "Above 20 people (per person)", price: "USD 35" },
+    ],
+  },
+};
+
+export const packageIncludes = [
+  "Bonfire experience",
+  "BBQ facilities",
+  "Nature walks",
+  "Kayak activities (Full Board)",
+  "Electricity from 6:00 p.m. to 10:00 p.m.",
+  "24/7 security",
+];
