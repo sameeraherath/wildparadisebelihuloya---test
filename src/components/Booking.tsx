@@ -108,12 +108,12 @@ const PACKAGE_FEATURES = {
     { icon: Flame, text: "Bonfire experience" },
     { icon: Utensils, text: "BBQ facilities" },
     { icon: Leaf, text: "Nature walks" },
+    { icon: Waves, text: "Kayaking" },
     { icon: Shield, text: "24/7 security" },
     { icon: Coffee, text: "Electricity 6PM-10PM" },
   ] as PackageFeature[],
   fullBoard: [
     { icon: Utensils, text: "All meals included" },
-    { icon: Waves, text: "Kayak activities" },
   ] as PackageFeature[],
   halfBoard: [
     { icon: Utensils, text: "Breakfast & Dinner" },

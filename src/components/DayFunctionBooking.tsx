@@ -20,7 +20,7 @@ const individualPackages = [
     price: 2500,
     features: [
       { icon: Utensils, text: "Lunch" },
-      { icon: Waves, text: "Kayak" },
+      { icon: Waves, text: "Kayaking" },
       { icon: Leaf, text: "Nature walk" },
     ],
   },
@@ -30,7 +30,7 @@ const individualPackages = [
     features: [
       { icon: Utensils, text: "Lunch & Dinner" },
       { icon: Leaf, text: "Nature walk" },
-      { icon: Waves, text: "Kayak" },
+      { icon: Waves, text: "Kayaking" },
       { icon: Coffee, text: "Evening herbal drink" },
       { icon: Flame, text: "Bonfire with Marshmallow burning" },
     ],
@@ -44,7 +44,7 @@ const individualPackages = [
       { icon: Flame, text: "Bonfire with Marshmallow burning" },
       { icon: Coffee, text: "Evening herbal drink" },
       { icon: Leaf, text: "Nature walk" },
-      { icon: Waves, text: "Kayak" },
+      { icon: Waves, text: "Kayaking" },
     ],
   },
   {
@@ -53,7 +53,7 @@ const individualPackages = [
     features: [
       { icon: Tent, text: "Tent stay" },
       { icon: Leaf, text: "Nature walk" },
-      { icon: Waves, text: "Kayak" },
+      { icon: Waves, text: "Kayaking" },
       { icon: Coffee, text: "Evening herbal drink" },
       { icon: Coffee, text: "Bed tea" },
     ],
