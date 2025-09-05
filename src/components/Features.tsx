@@ -1,16 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  Tent,
-  Waves,
-  TreePine,
-  Utensils,
-  Wifi,
-  Shield,
-  Car,
-  Coffee,
-} from "lucide-react";
-import amenitiesImage from "@/assets/amenities.webp";
+import { Tent, TreePine, Utensils, Shield } from "lucide-react";
 
 const Features = () => {
   const features = [
@@ -63,7 +53,7 @@ const Features = () => {
           <div className="order-2 lg:order-1">
             <div className="relative rounded-2xl overflow-hidden shadow-river">
               <img
-                src={amenitiesImage}
+                src="https://i.ibb.co/3mQT0R8K/7.png"
                 alt="Luxury camping amenities at Emerald River Forest Camp"
                 className="w-full h-[500px] object-cover"
               />

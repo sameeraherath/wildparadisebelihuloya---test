@@ -25,7 +25,7 @@ export const galleryImages = [
     "data-lg-size": "1600-1067",
   },
   {
-    src: "https://i.ibb.co/RkZnt2yg/7.webp",
+    src: "https://i.ibb.co/3mQT0R8K/7.png",
     alt: "Wild Paradise Belihuloya",
     "data-lg-size": "1600-1067",
   },
