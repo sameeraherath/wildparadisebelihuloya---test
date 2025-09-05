@@ -34,7 +34,7 @@ export const mealPlans: MealPlan[] = [
   {
     title: "Bonfire Cooking",
     description: "Interactive cooking experience around the fire",
-    items: ["Campfire Stew", "Roasted Corn", "Marshmallows", "Hot Chocolate"],
+    items: ["Campfire Stew", "Marshmallows"],
     familyFriendly: true,
     teamSuitable: true,
     category: "bonfire",
